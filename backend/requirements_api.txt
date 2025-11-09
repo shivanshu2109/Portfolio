@@ -1,3 +1,4 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bf233fd0dc122cfb7f16858b9fbfcf7114864cc78d9eed6151320740c3e2d5a9
-size 73
+flask>=3.0.0
+flask-cors>=4.0.0
+python-dotenv>=1.0.0
+requests>=2.32.0

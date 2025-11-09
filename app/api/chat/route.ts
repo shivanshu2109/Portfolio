@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:76c0a3bdf1a3a6155f9590aa86570eb24485419b3b4018acd06a790ade205705
-size 1066
+import { NextRequest, NextResponse } from 'next/server'
+
+export async function POST(request: NextRequest) {
+  try {
+    const { message } = await request.json()
+
+    if (!message || typeof message !== 'string') {
+      return NextResponse.json(
+        { error: 'Message is required' },
+        { status: 400 }
+      )
+    }
+
+    // Call your Python backend (Flask API)
+    const response = await fetch('http://localhost:5000/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question: message }),
+    })
+
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    return NextResponse.json({
+      message: data.answer,
+      timestamp: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error('Chat API error:', error)
+    return NextResponse.json(
+      { error: 'Failed to get response from AI assistant' },
+      { status: 500 }
+    )
+  }
+}
