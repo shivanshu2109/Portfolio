@@ -11,8 +11,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Call your Python backend (Flask API)
-    const response = await fetch('http://localhost:5000/api/chat', {
+    // Call your Python backend (Flask API).
+    // In production, set the BACKEND_URL environment variable in Vercel to your backend's base URL
+    // (for example: https://my-backend.example.com). Locally it will fall back to http://localhost:5000
+    const backendBase = process.env.BACKEND_URL || 'http://localhost:5000'
+    const response = await fetch(`${backendBase.replace(/\/$/, '')}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
